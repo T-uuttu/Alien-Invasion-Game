@@ -9,10 +9,11 @@ class Settings():
         self.bg_color = (0, 85, 255)
 
         # Ship settings
-        self.ship_speed = 1.5
+        self.ship_speed = 1.2
 
         # Projectile settings
-        self.projectile_speed = 1.0
+        self.projectile_speed = 0.5
         self.projectile_width = 10
-        self.projectile_height = 17
-        self.projectile_color = (70, 70, 70)
+        self.projectile_height = 19
+        self.projectile_color = (211, 92, 2)
+        self.projectiles_allowed = 3

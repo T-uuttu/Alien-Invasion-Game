@@ -32,8 +32,13 @@ class AlienInvasion():
         while True:
             self._check_events()
             self.ship.update()
-            self.projectiles.update()
+            self._update_projectiles()
             self._update_screen()
+
+            # Get rid of projectiles that have flown outside of view.
+            for projectile in self.projectiles.copy():
+                if projectile.rect.bottom <= 0:
+                    self.projectiles.remove(projectile)
 
     def _check_events(self):
         """ Respond to keypresses and mouse events. """
@@ -65,8 +70,19 @@ class AlienInvasion():
 
     def _fire_projectile(self):
         """ Create a new projectile and add it to the projectiles group. """
-        new_projectile = Projectile(self)
-        self.projectiles.add(new_projectile)
+        if len(self.projectiles) < self.settings.projectiles_allowed:
+            new_projectile = Projectile(self)
+            self.projectiles.add(new_projectile)
+
+    def _update_projectiles(self):
+        """ Update position of projectiles and get rid of old projectiles. """
+        # Update bullet positions.
+        self.projectiles.update()
+
+        # Get rid of projectiles that have disappeared.
+        for projectile in self.projectiles.copy():
+            if projectile.rect.bottom <= 0:
+                self.projectiles.remove(projectile)
 
     def _update_screen(self):
         """ Update images on the screen, and flip to the new screen. """
