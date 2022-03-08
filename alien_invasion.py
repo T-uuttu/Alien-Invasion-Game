@@ -4,6 +4,7 @@ import pygame
 from settings import Settings
 from ship import Ship
 from projectile import Projectile
+from ufo import Ufo
 
 
 class AlienInvasion():
@@ -23,6 +24,9 @@ class AlienInvasion():
 
         self.ship = Ship(self)
         self.projectiles = pygame.sprite.Group()
+        self.ufos = pygame.sprite.Group()
+
+        self._create_fleet()
 
         # Set the background color.
         self.bg_color = (230, 230, 230)
@@ -90,9 +94,16 @@ class AlienInvasion():
         self.ship.blitme()
         for projectile in self.projectiles.sprites():
             projectile.draw_projectile()
+        self.ufos.draw(self.screen)
 
         # Make the most recently drawn screen visible.
         pygame.display.flip()
+
+    def _create_fleet(self):
+        """ Create a fleet of UFOs. """
+        # Make an UFO.
+        ufo = Ufo(self)
+        self.ufos.add(ufo)
 
 
 if __name__ == '__main__':
