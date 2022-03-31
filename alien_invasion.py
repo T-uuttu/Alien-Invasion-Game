@@ -16,10 +16,10 @@ class AlienInvasion():
         self.settings = Settings()
 
         # Left in Fullscreen mode code in comments, just in case.
-        #self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-        #self.settings.screen_width = self.screen.get_rect().width
-        #self.settings.screen_height = self.screen.get_rect().height
-        self.screen = pygame.display.set_mode((1200, 800))
+        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        self.settings.screen_width = self.screen.get_rect().width
+        self.settings.screen_height = self.screen.get_rect().height
+        #self.screen = pygame.display.set_mode((800, 600))
         pygame.display.set_caption("Alien Invasion Part XYZ")
 
         self.ship = Ship(self)
@@ -101,8 +101,34 @@ class AlienInvasion():
 
     def _create_fleet(self):
         """ Create a fleet of UFOs. """
-        # Make an UFO.
+        # Make an UFO and find the number of UFOs in a row.
+        # Spacing between each UFO is equal to one UFO width.
         ufo = Ufo(self)
+        self.ufos.add(ufo)
+        ufo_width, ufo_height = ufo.rect.size
+        x_space_available = self.settings.screen_width - (2 * ufo_width)
+        number_ufos_x = x_space_available // (2 * ufo_width)
+
+        # Determine the number of rows of UFOs that fit on the screen.
+        ship_height = self.ship.rect.height
+        y_space_available = (self.settings.screen_height -
+                             (3 * ufo_height) - ship_height)
+        number_of_rows = y_space_available // (2 * ufo_height)
+
+        # Create full fleet of UFOs.
+        for row_number in range(number_of_rows):
+            for ufo_number in range(number_ufos_x):
+                self._create_ufo(ufo_number, row_number)
+
+            self._create_ufo(ufo_number, ufo_number)
+
+    def _create_ufo(self, ufo_number, number_of_rows):
+        """ Create an UFO and place it in the row. """
+        ufo = Ufo(self)
+        ufo_width, ufo_height = ufo.rect.size
+        ufo.x = ufo_width + 2 * ufo_width * ufo_number
+        ufo.rect.x = ufo.x
+        ufo.rect.y = ufo.rect.height + 2 * ufo.rect.height * number_of_rows
         self.ufos.add(ufo)
 
 
